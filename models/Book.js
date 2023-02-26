@@ -5,22 +5,14 @@ const mongoose = require('mongoose');
 const BookSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
     },
-    isbn: {
+    name: {
         type: String,
     },
     author: {
         type: String,
-        required: true,
     },
     description: {
-        type: String,
-    },
-    published_date: {
-        type: Date,
-    },
-    publisher: {
         type: String,
     },
     takenBy: {
@@ -32,9 +24,8 @@ const BookSchema = new mongoose.Schema({
     reservedBy: {
         type: [String],
     },
-    updated_date: {
-        type: Date,
-        default: Date.now,
+    cover: {
+        type: String,
     },
 });
 

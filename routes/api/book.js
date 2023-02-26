@@ -45,15 +45,27 @@ router.get('/:id', (req, res) => {
 // @route GET api/books
 // @description add/save book
 // @access Public
-router.post('/', upload.single('image'), (req, res) => {
-    console.log(req.body);
-    Book.create({ ...req.body, cover: req.file.path })
-        .then((book) => res.json({ msg: 'Book added successfully' }))
-        .catch((err) => {
-            console.log(err);
-            res.status(400).json({ error: req.body });
+router.post('/', upload.single('image'), async (req, res) => {
+    try {
+        const { title, author, description } = req.body;
+
+        const newBook = new Book({
+            title,
+            name: title,
+            author,
+            description,
+            cover: req.file ? req.file.path : null, // only set the cover if a file was uploaded
         });
+
+        const savedBook = await newBook.save();
+
+        res.status(201).json({ msg: 'Book added successfully', book: savedBook });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
+
 // @route GET api/books
 // @description reserve book
 // @access Public
