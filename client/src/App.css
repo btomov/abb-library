@@ -78,7 +78,10 @@
 .card-container a {
     color: white;
 }
-
+.card-container img {
+    object-fit: scale-down;
+    max-height: 200px;
+}
 .desc {
     /* height: 130px; */
     padding: 10px;

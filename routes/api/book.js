@@ -3,18 +3,26 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
 
-// Set up multer storage to save uploaded images to the 'uploads' folder
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    },
+require('dotenv').config();
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
 });
-
-const upload = multer({ storage: storage });
+// Set up multer storage to save uploaded images to the 'uploads' folder
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: 'pamalibrary',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        key: function (req, file, cb) {
+            cb(null, Date.now().toString() + '-' + file.originalname);
+        },
+    }),
+});
 
 // Load Book model
 const Book = require('../../models/Book');
@@ -54,7 +62,7 @@ router.post('/', upload.single('image'), async (req, res) => {
             name: title,
             author,
             description,
-            cover: req.file ? req.file.path : null, // only set the cover if a file was uploaded
+            cover: req.file ? `https://pamalibrary.s3.amazonaws.com/${req.file.key}` : null, // only set the cover if a file was uploaded
         });
 
         const savedBook = await newBook.save();
