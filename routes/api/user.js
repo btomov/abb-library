@@ -34,6 +34,6 @@ router.post('/add', (req, res) => {
         .catch((err) => res.status(400).json({ error: err }));
 });
 
-// curl -X POST http://localhost:8082/api/books -H "Content-Type: application/json" -d '{"title": "hello", "isbn": 12345, "author":"dharmandi", "description" : "hello", "published_date": "2022-07-26"}'
+// curl -X POST process.env.REACT_APP_BACKEND_URL/api/books -H "Content-Type: application/json" -d '{"title": "hello", "isbn": 12345, "author":"dharmandi", "description" : "hello", "published_date": "2022-07-26"}'
 
 module.exports = router;

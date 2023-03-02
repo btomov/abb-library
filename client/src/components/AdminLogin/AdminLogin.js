@@ -10,7 +10,7 @@ function AdminLogin() {
     const submitForm = (e) => {
         e.preventDefault();
         axios
-            .post('http://localhost:8082/api/users/checkAdmin', { password: pass })
+            .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/checkAdmin`, { password: pass })
             .then((response) => {
                 console.log(response.data);
                 if (response.data.message === 'Success') {

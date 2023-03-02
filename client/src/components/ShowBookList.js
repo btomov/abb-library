@@ -10,7 +10,9 @@ const ShowBookList = () => {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8082/api/books', { headers: { Authorization: `Bearer ${Cookies.get('token')}` } })
+            .get(`${process.env.REACT_APP_BACKEND_URL}/api/books`, {
+                headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+            })
             .then((res) => {
                 setBooks(res.data);
             })

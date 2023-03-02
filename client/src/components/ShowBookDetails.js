@@ -10,7 +10,7 @@ const ShowBookDetails = (props) => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8082/api/books/${props.match.params.id}`)
+            .get(`${process.env.REACT_APP_BACKEND_URL}/api/books/${props.match.params.id}`)
             .then((res) => {
                 setBook(res.data);
             })
@@ -21,7 +21,7 @@ const ShowBookDetails = (props) => {
 
     const onDeleteClick = (id) => {
         axios
-            .delete(`http://localhost:8082/api/books/${id}`)
+            .delete(`${process.env.REACT_APP_BACKEND_URL}/api/books/${id}`)
             .then((res) => {
                 props.history.push('/');
             })

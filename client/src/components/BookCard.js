@@ -13,7 +13,7 @@ const BookCard = (props) => {
     const sendTakenBy = (e) => {
         e.preventDefault();
         axios
-            .post('http://localhost:8082/api/books/takeBook', { bookId: book._id, takerName: takenBy })
+            .post(`${process.env.REACT_APP_BACKEND_URL}/api/books/takeBook`, { bookId: book._id, takerName: takenBy })
             .then((response) => {
                 console.log(response.data);
             })
@@ -25,7 +25,10 @@ const BookCard = (props) => {
     const sendReserve = (e) => {
         e.preventDefault();
         axios
-            .post('http://localhost:8082/api/books/reserve', { bookId: book._id, reserveeName: reservedBy })
+            .post(`${process.env.REACT_APP_BACKEND_URL}/api/books/reserve`, {
+                bookId: book._id,
+                reserveeName: reservedBy,
+            })
             .then((response) => {
                 console.log(response.data);
             })

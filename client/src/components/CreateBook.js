@@ -31,7 +31,7 @@ function CreateBook(props) {
         formData.append('image', image);
 
         axios
-            .post('http://localhost:8082/api/books', formData, {
+            .post(`${process.env.REACT_APP_BACKEND_URL}/api/books`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
