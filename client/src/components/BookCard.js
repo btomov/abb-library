@@ -9,7 +9,13 @@ const BookCard = (props) => {
     const isAuthenticated = Cookies.get('access_token');
     const [takenBy, setTakenBy] = useState('');
     const [reservedBy, setReservedBy] = useState('');
-    console.log(book);
+    function trimText(text, maxLength) {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + '...';
+        } else {
+            return text;
+        }
+    }
     const sendTakenBy = (e) => {
         e.preventDefault();
         axios
@@ -44,7 +50,7 @@ const BookCard = (props) => {
                     <Link to={`/show-book/${book._id}`}>{book.title}</Link>
                 </h2>
                 <h3>{book.author}</h3>
-                <p>{book.description}</p>
+                <p>{trimText(book.description, 30)}</p>
                 <p>Взета от: {book.takenBy}</p>
                 {isAuthenticated && (
                     <form>
@@ -54,7 +60,7 @@ const BookCard = (props) => {
                             placeholder="Взета от име"
                             onChange={(e) => setTakenBy(e.target.value)}
                         />
-                        <button onClick={sendTakenBy}>Изпрати</button>
+                        <button onClick={sendTakenBy}>ОК</button>
                     </form>
                 )}
                 <form>
@@ -64,7 +70,7 @@ const BookCard = (props) => {
                         placeholder="Име за резервация"
                         onChange={(e) => setReservedBy(e.target.value)}
                     />
-                    <button onClick={sendReserve}>Изпрати</button>
+                    <button onClick={sendReserve}>ОК</button>
                 </form>
             </div>
         </div>

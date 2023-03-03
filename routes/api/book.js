@@ -38,16 +38,7 @@ router.get('/test', (req, res) => res.send('book route testing!'));
 router.get('/', (req, res) => {
     Book.find()
         .then((books) => res.json(books))
-        .catch((err) => res.status(404).json({ nobooksfound: 'No Books found' }));
-});
-
-// @route GET api/books/:id
-// @description Get single book by id
-// @access Public
-router.get('/:id', (req, res) => {
-    Book.findById(req.params.id)
-        .then((book) => res.json(book))
-        .catch((err) => res.status(404).json({ nobookfound: 'No Book found' }));
+        .catch((err) => res.status(500).json({ nobooksfound: 'No Books found' }));
 });
 
 // @route GET api/books
@@ -141,6 +132,20 @@ router.put('/:id', (req, res) => {
 });
 
 // @route GET api/books/:id
+// @description Search books
+// @access Public
+router.get('/searchBooks', async (req, res) => {
+    try {
+        const searchTerm = req.query.searchTerm;
+        const query = {
+            $or: [{ author: { $regex: searchTerm, $options: 'i' } }, { title: { $regex: searchTerm, $options: 'i' } }],
+        };
+        const books = await Book.find(query);
+        res.status(200).json(books);
+    } catch (error) {}
+});
+
+// @route GET api/books/:id
 // @description Delete book by id
 // @access Public
 router.delete('/:id', (req, res) => {
@@ -149,4 +154,12 @@ router.delete('/:id', (req, res) => {
         .catch((err) => res.status(404).json({ error: 'No such a book' }));
 });
 
+// @route GET api/books/:id
+// @description Get single book by id
+// @access Public
+router.get('/:id', (req, res) => {
+    Book.findById(req.params.id)
+        .then((book) => res.json(book))
+        .catch((err) => res.status(500).json({ nobookfound: 'No Book found' }));
+});
 module.exports = router;
