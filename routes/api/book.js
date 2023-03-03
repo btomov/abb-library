@@ -7,6 +7,8 @@ const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 
 require('dotenv').config();
+console.log(process.env.AWS_ACCESS_KEY_ID);
+console.log(process.env.AWS_SECRET_ACCESS_KEY);
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -16,7 +18,7 @@ const s3 = new AWS.S3({
 const upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'pamalibrary',
+        bucket: 'pamalib',
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: function (req, file, cb) {
             cb(null, Date.now().toString() + '-' + file.originalname);
@@ -62,7 +64,7 @@ router.post('/', upload.single('image'), async (req, res) => {
             name: title,
             author,
             description,
-            cover: req.file ? `https://pamalibrary.s3.amazonaws.com/${req.file.key}` : null, // only set the cover if a file was uploaded
+            cover: req.file ? `https://pamalib.s3.amazonaws.com/${req.file.key}` : null, // only set the cover if a file was uploaded
         });
 
         const savedBook = await newBook.save();
